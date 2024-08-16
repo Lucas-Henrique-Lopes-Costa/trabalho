@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 
 $servername = "localhost"; // Alterar se necessário
 $username = "estudante"; // Alterar se necessário
-$password = "2022#estudante"; // Alterar se necessário
+$password = "estudante1"; // Alterar se necessário
 $dbname = "BD_Trabalho"; // Alterar se necessário
 
 // Criando a conexão

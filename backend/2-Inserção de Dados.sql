@@ -497,7 +497,8 @@ INSERT INTO `OrcCompra` (`dataCotacao`, `PessoaJuridica_Pessoa_idPessoa`, `preco
 ('2024-12-05', 16, 1550.00, '2024-12-20', 14, NULL),
 ('2024-12-10', 19, 1300.00, '2024-12-25', 8, NULL),
 ('2024-12-15', 23, 1700.00, '2024-12-30', 10, NULL),
-('2024-12-20', 26, 1350.00, '2025-01-05', 7, NULL);
+('2024-12-20', 26, 1350.00, '2025-01-05', 7, NULL),
+('2024-01-20', 11, 2300.00, '2024-02-01', 9, NULL);
 
 
 -- Inserindo dados na tabela Lead
@@ -746,7 +747,7 @@ INSERT INTO `CompoeOrcVenda` (`Produto_codProd`, `OrcVenda_dataCotacao`, `OrcVen
 (5, '2024-04-25', 32, 8, 199.90);
 
 -- Inserindo dados na tabela PessoaEndereço
-INSERT INTO `PessoaEndereço` (`Pessoa_idPessoa`, `numero`, `logadouro`, `complemento`, `bairro`, `cidade`, `cep`, `estado`) VALUES
+INSERT INTO `PessoaEndereco` (`Pessoa_idPessoa`, `numero`, `logadouro`, `complemento`, `bairro`, `cidade`, `cep`, `estado`) VALUES
 (1, 123, 'Rua Francisco Sales', NULL, 'Centro', 'Lavras', '37200000', 'MG'),
 (2, 456, 'Avenida Perimetral', 'Apto 301', 'Jardim Glória', 'Lavras', '37200000', 'MG'),
 (3, 789, 'Rua Misseno de Pádua', NULL, 'Dona Julieta', 'Lavras', '37200000', 'MG'),
