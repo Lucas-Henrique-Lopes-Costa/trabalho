@@ -1,3 +1,5 @@
+-- h)
+
 -- Criação dos usuários 
 CREATE USER 'denilson'@'localhost' IDENTIFIED BY 'BDTrabalho';
 CREATE USER 'Joao'@'localhost' IDENTIFIED BY 'mudar123';
