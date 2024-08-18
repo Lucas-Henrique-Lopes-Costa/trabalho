@@ -189,7 +189,7 @@ CREATE TABLE IF NOT EXISTS OrcCompra (
 CREATE TABLE IF NOT EXISTS `Lead` (
   PessoaFisica_Pessoa_idPessoa INT NOT NULL,
   plataformaOrigem INT NULL,
-  idAnuncio INT NOT NULL UNIQUE,
+  idAnuncio INT NOT NULL,
   dataCadastro DATE NOT NULL,
   PRIMARY KEY (PessoaFisica_Pessoa_idPessoa),
   CONSTRAINT fk_Vendedor_PessoaFisica10
