@@ -59,6 +59,7 @@ FROM Produto
 GROUP BY Produto.material
 HAVING SUM(Produto.qtdeEstoque) > 5
 ORDER BY total_estoque DESC;
+
 -- Seleciona o número de telefone de cada Pessoa que é cliente e seu nome
 SELECT PFIS.nome AS NomeCliente, PF.fone AS TelefoneCliente
 FROM PessoaFisica PFIS JOIN PessoaFone PF
