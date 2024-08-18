@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS PessoaFisica (
 CREATE TABLE IF NOT EXISTS PessoaJuridica (
   Pessoa_idPessoa INT NOT NULL,
   cnpj CHAR(14) NOT NULL,
-  razaoSocial VARCHAR(45) NOT NULL,
+  razaoSocial VARCHAR(45) NOT NULL UNIQUE,
   nomeFantasia VARCHAR(45) NULL,
   fornecedor TINYINT NOT NULL,
   transportadora TINYINT NOT NULL,
@@ -184,12 +184,12 @@ CREATE TABLE IF NOT EXISTS OrcCompra (
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
--- Table Lead
+-- Table Leads
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS Lead (
+CREATE TABLE IF NOT EXISTS `Lead` (
   PessoaFisica_Pessoa_idPessoa INT NOT NULL,
   plataformaOrigem INT NULL,
-  idAnuncio INT NOT NULL,
+  idAnuncio INT NOT NULL UNIQUE,
   dataCadastro DATE NOT NULL,
   PRIMARY KEY (PessoaFisica_Pessoa_idPessoa),
   CONSTRAINT fk_Vendedor_PessoaFisica10
