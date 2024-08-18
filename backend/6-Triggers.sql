@@ -1,5 +1,5 @@
 /* 1- Gatilho que impede que um determinado produto seja deletado se houver pelo menos 1 produto em estoque remanescete. - DELETE*/
-DROP TRIGGER before_produto_delete;
+DROP TRIGGER IF EXISTS before_produto_delete;
 
 DELIMITER $$
 CREATE TRIGGER  before_produto_delete
@@ -7,7 +7,7 @@ CREATE TRIGGER  before_produto_delete
     FOR EACH ROW
 BEGIN
     IF OLD.quantidade > 0 THEN
-    SIGNAL SQLESTATE '45000'
+    SIGNAL SQLESTATE '45000';
     SET MESSAGE_TEXT = 'Não é possível deletar o produto porque ainda há itens em estoque.';
     END IF;
 END $$
@@ -38,7 +38,7 @@ CREATE TRIGGER before_precoProduto_insert
     FOR EACH ROW
 BEGIN
     IF NEW.preco <= 0 THEN
-    SIGNAL SQLESTATE '45000'
+    SIGNAL SQLESTATE '45000';
     SET MESSAGE_TEXT = 'O preço definido para esse produto não é válido! Por favor, digite um preço para esse produto e insira novamente.';
     END IF;
 END $$
@@ -75,6 +75,8 @@ CREATE TABLE IF NOT EXISTS HISTORICO_ESTOQUE (
 
 DELIMITER $$
 
+DROP TRIGGER IF EXISTS before_produto_update;
+
 CREATE TRIGGER before_produto_update
 BEFORE UPDATE ON Produto
 FOR EACH ROW
@@ -85,7 +87,7 @@ BEGIN
     IF NEW.qtdeEstoque < 10 THEN
         SET observacao_texto = 'Estoque baixo';
     ELSE
-        SET observacao_texto = NULL;
+        SET observacao_texto = 'Estoque adequado';
     END IF;
     
     -- Insere o histórico da alteração do estoque na tabela de histórico
