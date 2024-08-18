@@ -59,3 +59,20 @@ FROM Produto
 GROUP BY Produto.material
 HAVING SUM(Produto.qtdeEstoque) > 5
 ORDER BY total_estoque DESC;
+-- Seleciona o número de telefone de cada Pessoa que é cliente e seu nome
+SELECT PFIS.nome AS NomeCliente, PF.fone AS TelefoneCliente
+FROM PessoaFisica PFIS JOIN PessoaFone PF
+ON PFIS.Pessoa_idPessoa = PF.Pessoa_idPessoa; 
+
+-- Seleciona e ordena os clientes que fizeram um Orçamento de venda e do que mais fez para o que menos fez
+SELECT PF.nome AS NomeCliente, COUNT(OV.Pessoa_idPessoa) AS QuantidadeDeOrcamentos
+FROM PessoaFisica PF JOIN OrcVenda OV
+ON PF.Pessoa_idPessoa = OV.Pessoa_idPessoa
+GROUP BY NomeCliente
+ORDER BY QuantidadeDeOrcamentos DESC;
+
+-- Seleciona os dados do Número de registro do vendedor, e a quantidade de pedidos de venda feitas por ele
+SELECT V.numRegistro AS NumeroRegistro, COUNT(PV.Vendedor_PessoaFisica_Pessoa_idPessoa) AS NumeroPedidos
+FROM Vendedor V JOIN PedidoVenda PV 
+ON PV.Vendedor_PessoaFisica_Pessoa_idPessoa = V.PessoaFisica_Pessoa_idPessoa
+GROUP BY V.numRegistro;
