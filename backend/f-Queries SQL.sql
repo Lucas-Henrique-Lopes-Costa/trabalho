@@ -78,18 +78,18 @@ FROM Vendedor V JOIN PedidoVenda PV
 ON PV.Vendedor_PessoaFisica_Pessoa_idPessoa = V.PessoaFisica_Pessoa_idPessoa
 GROUP BY V.numRegistro;
 
---seleciona a quantidade de clientes que vieram por cada anuncio - GROUP BY + count
+-- seleciona a quantidade de clientes que vieram por cada anuncio - GROUP BY + count
 SELECT idAnuncio, COUNT(PessoaFisica_Pessoa_idPessoa) AS quantidadeClientes
-FROM Lead
+FROM `Lead`
 GROUP BY idAnuncio;
 
 -- selecionar todos os clientes que se cadastraram entre duas datas específicas - BETWEEN
 SELECT PessoaFisica_Pessoa_idPessoa, idAnuncio, dataCadastro
-FROM Lead
+FROM `Lead`
 WHERE dataCadastro BETWEEN '2024-01-01' AND '2024-06-30';
 
 -- agrupa por preço médio das marcas
-SELECT marca, AVG(precoVenda) AS precoMedio
+SELECT marca, ROUND(AVG(precoVenda), 2) AS precoMedio
 FROM Produto
-WHERE marca IN ('%A', '%B', '%C')
+WHERE marca LIKE '%A' OR marca LIKE '%B' OR marca LIKE '%C'
 GROUP BY marca;
