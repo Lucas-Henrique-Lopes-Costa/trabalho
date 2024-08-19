@@ -1,5 +1,3 @@
--- g)
-
 -- Tirar a restrição de sempre ter que utilizar um GROUP BY na sessão
 SET SESSION sql_mode = (SELECT REPLACE(@@sql_mode, 'ONLY_FULL_GROUP_BY', ''));
 
@@ -50,5 +48,3 @@ SELECT idLeadCliente,
             ELSE 'Outra'
 		END AS NomePlataforma
 FROM LeadsClientes;
-
-

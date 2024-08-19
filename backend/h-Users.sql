@@ -15,4 +15,3 @@ REVOKE DELETE ON BD_Trabalho.* FROM 'denilson'@'localhost';
 
 -- Retira a opção de Inserir dados na tabela produto do usuário Joao
 REVOKE INSERT ON BD_Trabalho.Produto FROM 'Joao'@'localhost';
-

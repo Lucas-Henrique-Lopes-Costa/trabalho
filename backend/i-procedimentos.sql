@@ -1,6 +1,5 @@
-DELIMITER //
-
 -- Procedimento Para Verificar Estoque
+DELIMITER //
 CREATE PROCEDURE VerificarEstoque(
     IN p_codProd INT,
     IN p_quantidade INT,
@@ -19,8 +18,10 @@ BEGIN
         SET p_disponivel = FALSE;
     END IF;
 END //
+DELIMITER ;
 
 -- Função Para Calcular Valor Total do Pedido
+DELIMITER //
 CREATE FUNCTION CalcularValorTotalPedido(p_Pedido_id INT) 
 RETURNS FLOAT
 DETERMINISTIC
@@ -33,8 +34,10 @@ BEGIN
 
     RETURN IFNULL(v_valorTotal, 0);
 END //
+DELIMITER ;
 
 -- Procedimento Para Atualizar a Situação do Pedido
+DELIMITER //
 CREATE PROCEDURE AtualizarSituacaoPedido()
 BEGIN
     DECLARE v_idPedido INT;
@@ -67,5 +70,4 @@ BEGIN
     END LOOP;
     CLOSE cursorPedidos;
 END //
-
 DELIMITER ;

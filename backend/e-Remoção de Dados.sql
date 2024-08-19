@@ -15,7 +15,8 @@ WHERE PedidoCompra_Pedido_id IS NULL
 AND dataValidade < DATE_SUB(CURDATE(), INTERVAL 6 MONTH);
 
 
--- Remove os leads que não viraram clientes
+-- Remove os leads que não viraram clientes - CONFERIR
+/*
 WITH LeadsParaRemover AS (
     SELECT l.PessoaFisica_Pessoa_idPessoa
     FROM `Lead` l JOIN pessoafisica pf
@@ -28,6 +29,18 @@ DELETE FROM `Lead`
 WHERE PessoaFisica_Pessoa_idPessoa IN (
     SELECT PessoaFisica_Pessoa_idPessoa FROM LeadsParaRemover
 );
+*/
+
+
+-- Remove os leads que não viraram clientes
+DELETE FROM `Lead`
+WHERE PessoaFisica_Pessoa_idPessoa IN (
+    SELECT l.PessoaFisica_Pessoa_idPessoa
+    FROM `Lead` l
+    JOIN pessoafisica pf ON l.PessoaFisica_Pessoa_idPessoa = pf.Pessoa_idPessoa
+    JOIN pessoa p ON pf.Pessoa_idPessoa = p.idPessoa
+    WHERE p.ehCliente = false
+);
 
 -- Remove os enderços empresa de CNPJ "45678901000102"
 DELETE FROM pessoaendereco
@@ -39,7 +52,8 @@ WHERE Pessoa_idPessoa IN (
 );
 
 
--- Remove os orçamentos de venda que venceram a mais de 2 meses e não geraram pedido de venda
+-- Remove os orçamentos de venda que venceram a mais de 2 meses e não geraram pedido de venda - CONFERIR
+/*
 WITH orcVendaSemPedido AS (
     SELECT ov.Pessoa_idPessoa, ov.dataCotacao
     FROM orcvenda ov LEFT JOIN PedidoVendaOrc pvo
@@ -52,4 +66,16 @@ WITH orcVendaSemPedido AS (
 DELETE FROM orcvenda
 WHERE (Pessoa_idPessoa, dataCotacao) IN (
 	SELECT Pessoa_idPessoa, dataCotacao FROM orcVendaSemPedido
+);
+*/
+
+DELETE FROM orcvenda
+WHERE (Pessoa_idPessoa, dataCotacao) IN (
+    SELECT ov.Pessoa_idPessoa, ov.dataCotacao
+    FROM orcvenda ov
+    LEFT JOIN PedidoVendaOrc pvo
+        ON ov.Pessoa_idPessoa = pvo.OrcVenda_Pessoa_idPessoa
+        AND ov.dataCotacao = pvo.OrcVenda_dataCotacao
+    WHERE pvo.PedidoVenda_Pedido_id IS NULL
+    AND ov.dataValidade < DATE_SUB(CURDATE(), INTERVAL 2 MONTH)
 );
