@@ -1,6 +1,6 @@
 -- Atualiza o endereço do vendedor com o número de registro "1001" para
 -- Av. Dr. Silvio Menicuci, 2440 (Apto 403) - Vila Ester, Lavras - MG, 37200-000
-UPDATE pessoaendereço pe
+UPDATE pessoaendereco pe
 SET pe.numero = '2440',
     pe.logadouro = 'Av. Dr. Silvio Menicuci',
     pe.complemento = 'Apto 403',
@@ -19,12 +19,12 @@ WHERE pe.Pessoa_idPessoa = (
 );
 
 
--- Atualiza o preço cotado para 4000 no orçamento de venda com a data de cotação
--- de 2024-04-20 e idPessoa igual a 25 e aumenta sua data de validade em 10 dias.
-UPDATE orcvenda
+-- Atualiza o preço cotado para 4000 no orçamento de compra com a data de cotação
+-- de 2024-01-05 e idPessoa igual a 11 e aumenta sua data de validade em 10 dias.
+UPDATE orcCompra
 SET precoCotado = 4000,
     dataValidade = DATE_ADD(dataValidade, INTERVAL 10 DAY)
-WHERE dataCotacao = '2024-04-20' AND Pessoa_idPessoa = 25;
+WHERE dataCotacao = '2024-01-05' AND PessoaJuridica_Pessoa_idPessoa = 11;
 
 
 -- Atualiza o valor booleano `transportadora` para 1, indicando que a
