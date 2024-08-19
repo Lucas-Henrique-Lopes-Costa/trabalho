@@ -31,8 +31,8 @@ CREATE TABLE IF NOT EXISTS `PessoaFone` (
   CONSTRAINT `fk_fone_Pessoa1`
     FOREIGN KEY (`Pessoa_idPessoa`)
     REFERENCES `Pessoa` (`idPessoa`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
@@ -49,8 +49,8 @@ CREATE TABLE IF NOT EXISTS `PessoaFisica` (
   CONSTRAINT `fk_PessoaFisica_Pessoa1`
     FOREIGN KEY (`Pessoa_idPessoa`)
     REFERENCES `Pessoa` (`idPessoa`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
@@ -69,8 +69,8 @@ CREATE TABLE IF NOT EXISTS `PessoaJuridica` (
   CONSTRAINT `fk_PessoaJuridica_Pessoa1`
     FOREIGN KEY (`Pessoa_idPessoa`)
     REFERENCES `Pessoa` (`idPessoa`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
@@ -85,8 +85,8 @@ CREATE TABLE IF NOT EXISTS `Vendedor` (
   CONSTRAINT `fk_Vendedor_PessoaFisica1`
     FOREIGN KEY (`PessoaFisica_Pessoa_idPessoa`)
     REFERENCES `PessoaFisica` (`Pessoa_idPessoa`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
@@ -102,8 +102,8 @@ CREATE TABLE IF NOT EXISTS `Pedido` (
   CONSTRAINT `fk_Pedido_Pessoa1`
     FOREIGN KEY (`Pessoa_idPessoa`)
     REFERENCES `Pessoa` (`idPessoa`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
@@ -120,13 +120,13 @@ CREATE TABLE IF NOT EXISTS `PedidoVenda` (
   CONSTRAINT `fk_PedidoVenda_Vendedor1`
     FOREIGN KEY (`Vendedor_PessoaFisica_Pessoa_idPessoa`)
     REFERENCES `Vendedor` (`PessoaFisica_Pessoa_idPessoa`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_PedidoVenda_Pedido1`
     FOREIGN KEY (`Pedido_id`)
     REFERENCES `Pedido` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS `PedidoVenda` (
 CREATE TABLE IF NOT EXISTS `Produto` (
   `codProd` INT NOT NULL AUTO_INCREMENT,
   `descricao` VARCHAR(300) NULL,
-  `precoVenda` FLOAT NOT NULL,
+  `precoVenda` FLOAT NOT NULL DEFAULT 0,
   `qtdeEstoque` INT NOT NULL,
   `marca` VARCHAR(45) NULL,
   `nome` VARCHAR(45) NOT NULL,
@@ -154,8 +154,8 @@ CREATE TABLE IF NOT EXISTS `PedidoCompra` (
   CONSTRAINT `fk_PedidoCompra_Pedido1`
     FOREIGN KEY (`Pedido_id`)
     REFERENCES `Pedido` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
@@ -174,13 +174,13 @@ CREATE TABLE IF NOT EXISTS `OrcCompra` (
   CONSTRAINT `fk_EhCotado_PessoaJuridica1`
     FOREIGN KEY (`PessoaJuridica_Pessoa_idPessoa`)
     REFERENCES `PessoaJuridica` (`Pessoa_idPessoa`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_OrcCompra_PedidoCompra1`
     FOREIGN KEY (`PedidoCompra_Pedido_id`)
     REFERENCES `PedidoCompra` (`Pedido_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
@@ -195,8 +195,8 @@ CREATE TABLE IF NOT EXISTS `Lead` (
   CONSTRAINT `fk_Vendedor_PessoaFisica10`
     FOREIGN KEY (`PessoaFisica_Pessoa_idPessoa`)
     REFERENCES `PessoaFisica` (`Pessoa_idPessoa`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
@@ -214,13 +214,13 @@ CREATE TABLE IF NOT EXISTS `CompoeOrcCompra` (
   CONSTRAINT `fk_OrcCompra_has_Produto_OrcCompra1`
     FOREIGN KEY (`OrcCompra_dataCotacao` , `OrcCompra_PessoaJuridica_Pessoa_idPessoa`)
     REFERENCES `OrcCompra` (`dataCotacao` , `PessoaJuridica_Pessoa_idPessoa`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_OrcCompra_has_Produto_Produto1`
     FOREIGN KEY (`Produto_codProd`)
     REFERENCES `Produto` (`codProd`)
     ON DELETE CASCADE
-    ON UPDATE NO ACTION
+    ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
@@ -237,8 +237,8 @@ CREATE TABLE IF NOT EXISTS `OrcVenda` (
   CONSTRAINT `fk_OrcVenda_Pessoa1`
     FOREIGN KEY (`Pessoa_idPessoa`)
     REFERENCES `Pessoa` (`idPessoa`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
@@ -255,13 +255,13 @@ CREATE TABLE IF NOT EXISTS `CompoeVendaSemOrc` (
   CONSTRAINT `fk_PedidoVendaSemOrc_has_Produto_Produto1`
     FOREIGN KEY (`Produto_codProd`)
     REFERENCES `Produto` (`codProd`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION,
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_CompoeVendaSemOrc_PedidoVenda1`
     FOREIGN KEY (`PedidoVenda_Pedido_id`)
     REFERENCES `PedidoVenda` (`Pedido_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
@@ -280,12 +280,12 @@ CREATE TABLE IF NOT EXISTS `CompoeOrcVenda` (
     FOREIGN KEY (`Produto_codProd`)
     REFERENCES `Produto` (`codProd`)
     ON DELETE CASCADE
-    ON UPDATE NO ACTION,
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_CompoeVendaComOrc_OrcVenda1`
     FOREIGN KEY (`OrcVenda_dataCotacao` , `OrcVenda_Pessoa_idPessoa`)
     REFERENCES `OrcVenda` (`dataCotacao` , `Pessoa_idPessoa`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
@@ -305,8 +305,8 @@ CREATE TABLE IF NOT EXISTS `PessoaEndereco` (
   CONSTRAINT `fk_PessoaEndereco_Pessoa`
     FOREIGN KEY (`Pessoa_idPessoa`)
     REFERENCES `Pessoa` (`idPessoa`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
@@ -322,13 +322,13 @@ CREATE TABLE IF NOT EXISTS `PedidoVendaOrc` (
   CONSTRAINT `fk_PedidoVenda_has_OrcVenda_PedidoVenda1`
     FOREIGN KEY (`PedidoVenda_Pedido_id`)
     REFERENCES `PedidoVenda` (`Pedido_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_PedidoVenda_has_OrcVenda_OrcVenda1`
     FOREIGN KEY (`OrcVenda_dataCotacao` , `OrcVenda_Pessoa_idPessoa`)
     REFERENCES `OrcVenda` (`dataCotacao` , `Pessoa_idPessoa`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE
 ) ENGINE = InnoDB;
 
 SET SQL_MODE=@OLD_SQL_MODE;
