@@ -18,20 +18,19 @@ AND dataValidade < DATE_SUB(CURDATE(), INTERVAL 6 MONTH);
 -- Remove os leads que não viraram clientes
 WITH LeadsParaRemover AS (
     SELECT l.PessoaFisica_Pessoa_idPessoa
-    FROM `lead` l JOIN pessoafisica pf
+    FROM `Lead` l JOIN pessoafisica pf
 		 ON l.PessoaFisica_Pessoa_idPessoa = pf.Pessoa_idPessoa JOIN pessoa p
          ON pf.Pessoa_idPessoa = p.idPessoa
     WHERE p.ehCliente = false
 )
 
-DELETE FROM `lead`
+DELETE FROM `Lead`
 WHERE PessoaFisica_Pessoa_idPessoa IN (
     SELECT PessoaFisica_Pessoa_idPessoa FROM LeadsParaRemover
 );
 
-
 -- Remove os enderços empresa de CNPJ "45678901000102"
-DELETE FROM pessoaendereço
+DELETE FROM pessoaendereco
 WHERE Pessoa_idPessoa IN (
     SELECT p.idPessoa
     FROM pessoa p JOIN pessoajuridica pj

@@ -1,4 +1,3 @@
--- (b)
 -- Adiciona campo CNPJ na tabela de Leads. Faz sentido, pois um Lead pode ser uma empresa
 -- Se inicia com valor nulo, já que há leads que não tem CNPJ
 ALTER TABLE `Lead` ADD COLUMN cnpj CHAR(14) NULL;
