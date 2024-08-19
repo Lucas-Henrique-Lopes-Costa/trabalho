@@ -50,7 +50,7 @@ JOIN PessoaFisica ON Vendedor.PessoaFisica_Pessoa_idPessoa = PessoaFisica.Pessoa
 JOIN PessoaFone ON PessoaFisica.Pessoa_idPessoa = PessoaFone.Pessoa_idPessoa
 ORDER BY PessoaFisica.nome ASC;
 
---Esta consulta agrupa os produtos pelo tipo de material, calcula a quantidade total em estoque 
+-- Esta consulta agrupa os produtos pelo tipo de material, calcula a quantidade total em estoque 
 -- para cada material, e exibe apenas os materiais que têm mais de 5 unidades em estoque.
 SELECT 
     Produto.material, 
@@ -93,3 +93,22 @@ SELECT marca, ROUND(AVG(precoVenda), 2) AS precoMedio
 FROM Produto
 WHERE marca LIKE '%A' OR marca LIKE '%B' OR marca LIKE '%C'
 GROUP BY marca;
+
+-- seleciona todos os orcamentos de compra que estão com a situação atrasada, e mostra quantos dias de atraso
+SELECT o.PedidoCompra_Pedido_id, o.dataCotacao, o.dataValidade, DATEDIFF(CURDATE(), o.dataValidade) AS diasVencimento
+FROM orccompra o
+WHERE o.dataValidade < CURDATE()
+ORDER BY diasVencimento ASC;
+
+-- seleciona todos os clientes com numeros de telefone pertencentes a cidade de São Paulo
+SELECT PFIS.nome AS NomeCliente, PF.fone AS TelefoneCliente
+FROM pessoa P 
+JOIN pessoaFisica PFIS ON P.idPessoa = PFIS.Pessoa_idPessoa
+JOIN PessoaFone PF ON PFIS.Pessoa_idPessoa = PF.Pessoa_idPessoa
+WHERE P.ehCliente = 1
+AND PF.fone LIKE '%+5511%';
+
+-- seleciona o nome, código e descrição dos produtos com descrição menor que 15 caracteres
+SELECT codProd, nome, descricao
+FROM produto
+WHERE LENGTH(descricao) < 15;
