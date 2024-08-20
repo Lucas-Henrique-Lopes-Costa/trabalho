@@ -1,5 +1,3 @@
--- h)
-
 /*
   Exemplos de utilização:
     - Logue com o usuário criado no Banco de dados após serem dados os seus privilégios.

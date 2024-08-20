@@ -142,7 +142,7 @@ INSERT INTO `Vendedor` (`PessoaFisica_Pessoa_idPessoa`, `numRegistro`, `dataAdim
 -- Inserindo dados na tabela Pedido
 INSERT INTO `Pedido` (`Pessoa_idPessoa`, `dataPedido`, `situacao`) VALUES
 (1, '2024-01-01', 'entregue'),
-(1, '2024-01-15', 'processando'),
+(1, '2024-08-19', 'processando'),
 (3, '2024-01-20', 'entregue'),
 (3, '2024-01-25', 'cancelado'),
 (5, '2024-02-01', 'transito'),

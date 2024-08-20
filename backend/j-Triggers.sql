@@ -13,20 +13,19 @@ BEGIN
 END $$
 DELIMITER ;
 
--- INSERT INTO Produto (codProd, descricao, precoVenda, qtdeEstoque, marca, nome, material, cor) VALUES
--- (33, 'Jaqueta-UFLA', 270.80, 1, 'Marca X', 'Jaqueta', 'Titânio', 'Azul'); /* Insere um exemplo */
+INSERT INTO Produto (codProd, descricao, precoVenda, qtdeEstoque, marca, nome, material, cor) VALUES (33, 'Jaqueta-UFLA', 270.80, 1, 'Marca X', 'Jaqueta', 'Titânio', 'Azul'); /* Insere um exemplo */
 
 -- Exemplo 1:
 
--- SELECT * FROM Produto; /*Exemplifica quais produtos estão no estoque */
+SELECT * FROM Produto; /*Exemplifica quais produtos estão no estoque */
 
--- DELETE FROM Produto WHERE codProd = 33; /* Tenta deletar um produto com um item ainda remanescente */
+DELETE FROM Produto WHERE codProd = 33; /* Tenta deletar um produto com um item ainda remanescente */
 
--- UPDATE Produto SET qtdeEstoque = 0 WHERE codProd = 33; /* Atualiza a quantidade do produto para 0, como se tivesse ocorrido a ultima venda*/
+UPDATE Produto SET qtdeEstoque = 0 WHERE codProd = 33; /* Atualiza a quantidade do produto para 0, como se tivesse ocorrido a ultima venda*/
 
--- DELETE FROM Produto WHERE codProd = 33; /* Deleta o produto caso a loja não queira mais trabalhar com ele */
+DELETE FROM Produto WHERE codProd = 33; /* Deleta o produto caso a loja não queira mais trabalhar com ele */
 
--- SELECT * FROM Produto; /*Exemplifica quais produtos estão no estoque */
+SELECT * FROM Produto; /*Exemplifica quais produtos estão no estoque */
 
 
 /* 2- Gatilho que impede que um determinado preço de produto seja definido com valor nulo ou negativo - INSERT */
@@ -46,17 +45,15 @@ DELIMITER ;
 
 -- Exemplo 2:
 
--- SELECT * FROM Produto;
+SELECT * FROM Produto;
 
--- INSERT INTO Produto (codProd, descricao, precoVenda, qtdeEstoque, marca, nome, material, cor) VALUES
--- (33, 'Jaqueta-UFLA', 0.00 , 1, 'Marca X', 'Jaqueta', 'Titânio', 'Azul'); /* Insere um exemplo com erro */
+INSERT INTO Produto (codProd, descricao, precoVenda, qtdeEstoque, marca, nome, material, cor) VALUES (33, 'Jaqueta-UFLA', 0.00 , 1, 'Marca X', 'Jaqueta', 'Titânio', 'Azul'); /* Insere um exemplo com erro */
 
--- SELECT * FROM Produto;
+SELECT * FROM Produto;
 
--- INSERT INTO Produto (codProd, descricao, precoVenda, qtdeEstoque, marca, nome, material, cor) VALUES
--- (33, 'Jaqueta-UFLA', 217.90 , 1, 'Marca X', 'Jaqueta', 'Titânio', 'Azul'); /* Insere um exemplo corretamente*/
+INSERT INTO Produto (codProd, descricao, precoVenda, qtdeEstoque, marca, nome, material, cor) VALUES (33, 'Jaqueta-UFLA', 217.90 , 1, 'Marca X', 'Jaqueta', 'Titânio', 'Azul'); /* Insere um exemplo corretamente*/
 
--- SELECT * FROM Produto WHERE codProd = 33;
+SELECT * FROM Produto WHERE codProd = 33;
 
 /* 3- Gatilho que controla automaticamente o estoque baixo de um determinado produto. Além disso, salva cada alteração feita
 na quantidade de produtos, como o vendedor e o horário da venda - UPDATE*/
@@ -73,9 +70,9 @@ CREATE TABLE IF NOT EXISTS HISTORICO_ESTOQUE (
     FOREIGN KEY (idProduto) REFERENCES Produto(codProd)
 );
 
-DELIMITER $$
-
 DROP TRIGGER IF EXISTS before_produto_update;
+
+DELIMITER $$
 
 CREATE TRIGGER before_produto_update
 BEFORE UPDATE ON Produto

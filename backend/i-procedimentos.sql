@@ -23,15 +23,11 @@ END //
 DELIMITER ;
 
 -- Para teste do procedimento
--- SELECT * 
--- FROM produto;
+SELECT * 
+FROM produto;
 
 CALL VerificarEstoque(1, 51, @disponivel);
 SELECT @disponivel;
-
-
-
-
 
 
 -- PROCEDIMENTO 2
@@ -52,15 +48,17 @@ BEGIN
     WHERE codProd = p_codProd;
 
     UPDATE Produto
-    SET precoVenda = precoVenda * (1 - CASE 
+    SET precoVenda = ROUND(precoVenda * (1 - CASE 
                                         WHEN v_qtdeEstoque < 20 THEN p_descontoBaixoEstoque
                                         ELSE p_descontoAltoEstoque
-                                      END)
+                                      END), 2)
     WHERE codProd = p_codProd;
 END //
 
 DELIMITER ;
 
+SELECT *
+FROM produto;
 
 CALL AtualizarPrecoComDesconto(
     5,       -- Código do produto
@@ -68,14 +66,8 @@ CALL AtualizarPrecoComDesconto(
     0.20     -- Desconto de 20% para alto estoque
 );
 
-select *
+SELECT *
 FROM produto;
-
-
-
-
-
-
 
 
 -- PROCEDIMENTO 3
@@ -117,7 +109,7 @@ END //
 DELIMITER ;
 
 -- Para teste do Procedimento
--- SELECT * 
--- FROM pedido;
+SELECT * 
+FROM pedido;
 
 CALL VerificarPedidosAtrasados();
