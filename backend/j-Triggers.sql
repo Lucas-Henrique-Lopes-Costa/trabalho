@@ -38,7 +38,7 @@ CREATE TRIGGER before_precoProduto_insert
     FOR EACH ROW
 BEGIN
     IF NEW.precoVenda <= 0 THEN
-    SIGNAL SQLSTATE '45000';
+    SIGNAL SQLSTATE '45000'
     SET message_text = 'O preço definido para esse produto não é válido! Por favor, digite um preço para esse produto e insira novamente.';
     END IF;
 END $$
