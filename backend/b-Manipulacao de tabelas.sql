@@ -2,8 +2,8 @@
 -- Se inicia com valor nulo, já que há leads que não tem CNPJ
 ALTER TABLE `Lead` ADD COLUMN cnpj CHAR(14) NULL;
 
--- Remove a coluna de data de validade da tabela OrcVenda se não houverem restrições.
-ALTER TABLE OrcVenda DROP COLUMN dataValidade RESTRICT;
+-- Remove a coluna complemento da tabela PessoaEndereco se não houverem restrições.
+ALTER TABLE PessoaEndereco DROP COLUMN complemento RESTRICT;
 
 -- Adiciona um valor default de '11111111111' nos cpfs da tabela PessoaFisica
 ALTER TABLE PessoaFisica ALTER COLUMN cpf SET DEFAULT '11111111111';
