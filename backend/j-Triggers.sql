@@ -102,5 +102,6 @@ DELIMITER ;
 SELECT * FROM PRODUTO;
 
 UPDATE Produto SET qtdeEstoque = 5 WHERE codProd = 1;
+UPDATE Produto SET qtdeEstoque = 8 WHERE codProd = 2;
 
 SELECT * FROM HISTORICO_ESTOQUE;
