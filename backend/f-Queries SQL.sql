@@ -11,8 +11,7 @@ SELECT
     ) AS PercentualDeOrcamentosQueGeraramPedido
 FROM orcvenda o JOIN 
      pedidovendaorc p ON 
-     o.dataCotacao = p.OrcVenda_dataCotacao AND o.Pessoa_idPessoa = p.OrcVenda_Pessoa_idPessoa;
-     
+     o.dataCotacao = p.OrcVenda_dataCotacao AND o.Pessoa_idPessoa = p.OrcVenda_Pessoa_idPessoa;     
 
 -- Seleciona o nome, o número de registro e a quantidade de pedidos vendidos dos vendedores
 -- que realizaram pelo menos 10 vendas. Os resultados são ordenados de forma decrescente 
@@ -28,7 +27,6 @@ GROUP BY nome, numRegistro
 HAVING qtdPedidosVendidos >= 10
 ORDER BY qtdPedidosVendidos DESC, nomeVendedor;
 
-
 -- Calcula o valor do ticket médio dos pedidos de venda
 SELECT CONCAT('R$ ', ROUND(
     (
@@ -37,7 +35,6 @@ SELECT CONCAT('R$ ', ROUND(
     ) / COUNT(*), 2)) AS ValorTicketMedio
 FROM pedidovenda;
 
--- Seleciona o nome, o número de registro e a quantidade de pedidos vendidos dos vendedores
 -- usamos para conseguir verificar se exite para fazer a conexão com o php
 SELECT user, host FROM mysql.user WHERE user = 'estudante';
 
@@ -112,3 +109,57 @@ AND PF.fone LIKE '%+5511%';
 SELECT codProd, nome, descricao
 FROM produto
 WHERE LENGTH(descricao) < 15;
+
+-- Seleciona os vendedores que fizeram pelo menos uma venda.
+SELECT nome 
+FROM
+	vendedor v JOIN
+    pessoafisica p ON
+    v.PessoaFisica_Pessoa_idPessoa = p.Pessoa_idPessoa    
+WHERE PessoaFisica_Pessoa_idPessoa IN (
+    SELECT Vendedor_PessoaFisica_Pessoa_idPessoa 
+    FROM pedidovenda
+);
+
+-- Seleciona os orçamentos de venda que venceram a mais de 2 meses e não geraram pedido de venda
+SELECT dataCotacao, Pessoa_idPessoa, dataValidade, prazoEntrega, precoCotado
+FROM orcvenda ov LEFT OUTER JOIN PedidoVendaOrc pvo
+	 ON ov.Pessoa_idPessoa = pvo.OrcVenda_Pessoa_idPessoa
+	 AND ov.dataCotacao = pvo.OrcVenda_dataCotacao
+WHERE pvo.PedidoVenda_Pedido_id IS NULL
+AND ov.dataValidade < DATE_SUB(CURDATE(), INTERVAL 2 MONTH);
+
+-- Seleciona o nome de todas as pessoas físicas e jurídicas cadastradas
+SELECT nome FROM PessoaFisica
+UNION
+SELECT nomeFantasia AS nome FROM PessoaJuridica;
+
+-- Seleciona os orçamentos de compra que geraram pedido de compra 
+SELECT *
+FROM OrcCompra
+WHERE PedidoCompra_Pedido_id IS NOT NULL;
+
+-- Recupera os IDs dos pedidos de venda sem orçamento onde todos os itens vendidos têm preço superior a R$100
+SELECT DISTINCT PedidoVenda_Pedido_id 
+FROM CompoeVendaSemOrc cv1
+WHERE 100 < ALL (
+                  SELECT cv2.preco 
+                  FROM CompoeVendaSemOrc cv2 
+                  WHERE cv1.PedidoVenda_Pedido_id = cv2.PedidoVenda_Pedido_id
+                )
+ORDER BY PedidoVenda_Pedido_id;
+
+-- Recupera os IDs dos pedidos de venda sem orçamento onde pelo menos um item possui o valor superior a R$200
+SELECT DISTINCT PedidoVenda_Pedido_id 
+FROM CompoeVendaSemOrc cv1
+WHERE 200 < ANY (
+                  SELECT cv2.preco 
+                  FROM CompoeVendaSemOrc cv2 
+                  WHERE cv1.PedidoVenda_Pedido_id = cv2.PedidoVenda_Pedido_id
+                )
+ORDER BY PedidoVenda_Pedido_id;
+                  
+-- Recupera o nome das pessoas físicas que têm pelo menos um orçamento registrado.
+-- O SELECT 1 é usado com EXISTS para verificar se a subconsulta retorna alguma linha, sem se preocupar com os dados específicos.
+SELECT nome FROM PessoaFisica pf
+WHERE EXISTS (SELECT 1 FROM OrcVenda o WHERE o.Pessoa_idPessoa = pf.Pessoa_idPessoa);
