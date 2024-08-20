@@ -6,9 +6,9 @@ CREATE TRIGGER  before_produto_delete
     BEFORE DELETE ON Produto
     FOR EACH ROW
 BEGIN
-    IF OLD.quantidade > 0 THEN
-    SIGNAL SQLSTATE '45000';
-    SET MESSAGE_TEXT = 'Não é possível deletar o produto porque ainda há itens em estoque.';
+    IF OLD.qtdeEstoque > 0 THEN
+    SIGNAL SQLSTATE '45000'
+    SET message_text = 'Não é possível deletar o produto porque ainda há itens em estoque.';
     END IF;
 END $$
 DELIMITER ;
@@ -37,9 +37,9 @@ CREATE TRIGGER before_precoProduto_insert
     BEFORE INSERT ON Produto
     FOR EACH ROW
 BEGIN
-    IF NEW.preco <= 0 THEN
+    IF NEW.precoVenda <= 0 THEN
     SIGNAL SQLSTATE '45000';
-    SET MESSAGE_TEXT = 'O preço definido para esse produto não é válido! Por favor, digite um preço para esse produto e insira novamente.';
+    SET message_text = 'O preço definido para esse produto não é válido! Por favor, digite um preço para esse produto e insira novamente.';
     END IF;
 END $$
 DELIMITER ;
