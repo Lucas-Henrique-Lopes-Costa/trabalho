@@ -46,5 +46,5 @@ SELECT idLeadCliente,
             WHEN 22 THEN 'Facebook'
             WHEN 33 THEN 'Twitter'
             ELSE 'Outra'
-		END AS NomePlataforma
+		END AS NomePlataforma -- CASE CRIA UMA OUTRA COM ESSAS CORRESPONDÊNCIAS
 FROM LeadsClientes;

@@ -3,11 +3,11 @@ DROP TRIGGER IF EXISTS before_produto_delete;
 
 DELIMITER $$
 CREATE TRIGGER  before_produto_delete
-    BEFORE DELETE ON Produto
+    BEFORE DELETE ON Produto -- Quando alguem chama o DELETE na tabela
     FOR EACH ROW
 BEGIN
     IF OLD.qtdeEstoque > 0 THEN
-    SIGNAL SQLSTATE '45000'
+    SIGNAL SQLSTATE '45000' -- SINAL PARA ERRO
     SET message_text = 'Não é possível deletar o produto porque ainda há itens em estoque.';
     END IF;
 END $$

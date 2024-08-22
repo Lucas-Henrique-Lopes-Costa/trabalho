@@ -18,7 +18,7 @@ FROM orcvenda o JOIN
 -- pela quantidade de pedidos vendidos. Em caso de empate na quantidade de pedidos, 
 -- a ordenação secundária é feita em ordem alfabética crescente pelo nome do vendedor.
 SELECT nome AS nomeVendedor, numRegistro, COUNT(*) AS qtdPedidosVendidos
-FROM pedidovenda pv JOIN
+FROM pedidovenda pv JOIN -- INNER JOIN PORQUE NÃO FAZ SENTIDO PEGAR VALORES QUE NÃO TENHAM CORRESPONDENCIAS NAS OUTRAS TABELAS
 	 vendedor v ON
      pv.Vendedor_PessoaFisica_Pessoa_idPessoa = v.PessoaFisica_Pessoa_idPessoa JOIN
      pessoafisica pf ON
@@ -36,7 +36,7 @@ SELECT CONCAT('R$ ', ROUND(
 FROM pedidovenda;
 
 -- usamos para conseguir verificar se exite para fazer a conexão com o php
-SELECT user, host FROM mysql.user WHERE user = 'estudante';
+SELECT user, host FROM mysql.user;
 
 -- Esta consulta recupera os nomes dos vendedores e seus números de telefone, combinando as 
 -- tabelas Vendedor, PessoaFisica, e PessoaFone, e ordena os resultados alfabeticamente pelo 
@@ -77,7 +77,7 @@ GROUP BY V.numRegistro;
 
 -- seleciona a quantidade de clientes que vieram por cada anuncio - GROUP BY + count
 SELECT idAnuncio, COUNT(PessoaFisica_Pessoa_idPessoa) AS quantidadeClientes
-FROM `Lead`
+FROM `Lead` -- USA A CRASE PORQUE ELA É PALAVRA RESERVADO
 GROUP BY idAnuncio;
 
 -- selecionar todos os clientes que se cadastraram entre duas datas específicas - BETWEEN
@@ -88,7 +88,7 @@ WHERE dataCadastro BETWEEN '2024-01-01' AND '2024-06-30';
 -- agrupa por preço médio das marcas
 SELECT marca, ROUND(AVG(precoVenda), 2) AS precoMedio
 FROM Produto
-WHERE marca LIKE '%A' OR marca LIKE '%B' OR marca LIKE '%C'
+WHERE marca LIKE '%A' OR marca LIKE '%B' OR marca LIKE '%C' -- TERMINA COM %
 GROUP BY marca;
 
 -- seleciona todos os orcamentos de compra que estão com a situação atrasada, e mostra quantos dias de atraso
@@ -115,18 +115,18 @@ SELECT nome
 FROM
 	vendedor v JOIN
     pessoafisica p ON
-    v.PessoaFisica_Pessoa_idPessoa = p.Pessoa_idPessoa    
+    v.PessoaFisica_Pessoa_idPessoa = p.Pessoa_idPessoa
 WHERE PessoaFisica_Pessoa_idPessoa IN (
     SELECT Vendedor_PessoaFisica_Pessoa_idPessoa 
     FROM pedidovenda
-);
+); -- DARIA PARA FAZER DE UMA FORMMA MAIS SIMPLES, MAS O USO DO IN É PARA COMPRIR REQUISITO, poderiamos fazer um JOIN com pedido venda com idPessoa
 
 -- Seleciona os orçamentos de venda que venceram a mais de 2 meses e não geraram pedido de venda
 SELECT dataCotacao, Pessoa_idPessoa, dataValidade, prazoEntrega, precoCotado
-FROM orcvenda ov LEFT OUTER JOIN PedidoVendaOrc pvo
+FROM orcvenda ov LEFT OUTER JOIN PedidoVendaOrc pvo -- OUTER JOIN PARA PEGAR OS NULOS
 	 ON ov.Pessoa_idPessoa = pvo.OrcVenda_Pessoa_idPessoa
 	 AND ov.dataCotacao = pvo.OrcVenda_dataCotacao
-WHERE pvo.PedidoVenda_Pedido_id IS NULL
+WHERE pvo.PedidoVenda_Pedido_id IS NULL -- SELECIONA OS NULOS
 AND ov.dataValidade < DATE_SUB(CURDATE(), INTERVAL 2 MONTH);
 
 -- Seleciona o nome de todas as pessoas físicas e jurídicas cadastradas
@@ -140,13 +140,13 @@ FROM OrcCompra
 WHERE PedidoCompra_Pedido_id IS NOT NULL;
 
 -- Recupera os IDs dos pedidos de venda sem orçamento onde todos os itens vendidos têm preço superior a R$100
-SELECT DISTINCT PedidoVenda_Pedido_id 
+SELECT DISTINCT PedidoVenda_Pedido_id -- DISTINCT PORQUE ELE NÃO PEGA REPETIDO
 FROM CompoeVendaSemOrc cv1
 WHERE 100 < ALL (
                   SELECT cv2.preco 
                   FROM CompoeVendaSemOrc cv2 
                   WHERE cv1.PedidoVenda_Pedido_id = cv2.PedidoVenda_Pedido_id
-                )
+                ) -- PARA CADA TUPLA VAI GERAR UMA TABELA E TODOS TEM QUE SER MAIOR, INEFICIENTE PORQUE PARA CADA LINHA FAZ UM SELECT DIFERENTE
 ORDER BY PedidoVenda_Pedido_id;
 
 -- Recupera os IDs dos pedidos de venda sem orçamento onde pelo menos um item possui o valor superior a R$200
@@ -156,10 +156,10 @@ WHERE 200 < ANY (
                   SELECT cv2.preco 
                   FROM CompoeVendaSemOrc cv2 
                   WHERE cv1.PedidoVenda_Pedido_id = cv2.PedidoVenda_Pedido_id
-                )
+                ) -- ANY PEGA SE UMA CONDIÇÃO JÁ FOR SUPRIDA
 ORDER BY PedidoVenda_Pedido_id;
                   
 -- Recupera o nome das pessoas físicas que têm pelo menos um orçamento registrado.
 -- O SELECT 1 é usado com EXISTS para verificar se a subconsulta retorna alguma linha, sem se preocupar com os dados específicos.
 SELECT nome FROM PessoaFisica pf
-WHERE EXISTS (SELECT 1 FROM OrcVenda o WHERE o.Pessoa_idPessoa = pf.Pessoa_idPessoa);
+WHERE EXISTS (SELECT 1 FROM OrcVenda o WHERE o.Pessoa_idPessoa = pf.Pessoa_idPessoa); -- O SELECT 1 É PEGAR A PRIMEIRA LINHA DA CONSULTA E O EXISTS SELECIONA O VERDADEIRO

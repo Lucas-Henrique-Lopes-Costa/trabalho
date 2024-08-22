@@ -9,7 +9,7 @@ CREATE PROCEDURE VerificarEstoque(
 BEGIN
     DECLARE v_qtdeEstoque INT;
 
-    SELECT qtdeEstoque INTO v_qtdeEstoque
+    SELECT qtdeEstoque INTO v_qtdeEstoque -- SALVA VARIÁVEL
     FROM Produto
     WHERE codProd = p_codProd;
 
@@ -26,7 +26,7 @@ DELIMITER ;
 SELECT * 
 FROM produto;
 
-CALL VerificarEstoque(1, 51, @disponivel);
+CALL VerificarEstoque(1, 5, @disponivel);
 SELECT @disponivel;
 
 
@@ -51,7 +51,7 @@ BEGIN
     SET precoVenda = ROUND(precoVenda * (1 - CASE 
                                         WHEN v_qtdeEstoque < 20 THEN p_descontoBaixoEstoque
                                         ELSE p_descontoAltoEstoque
-                                      END), 2)
+                                      END), 2) -- ATUALIZA O VALOR DO PRODUTO PARA DAR DESCONTO NOS QUE TIVEREM MAIS DE 20
     WHERE codProd = p_codProd;
 END //
 
@@ -80,12 +80,12 @@ BEGIN
     DECLARE v_dataPedido DATE;
     DECLARE done INT DEFAULT 0;
 
-    DECLARE cursorPedidos CURSOR FOR
+    DECLARE cursorPedidos CURSOR FOR -- INTERADOR vai passando por cada linha
     SELECT id, dataPedido
     FROM Pedido
     WHERE situacao = 'processando';
 
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1; -- set da variavel para 1
 
     OPEN cursorPedidos;
 
